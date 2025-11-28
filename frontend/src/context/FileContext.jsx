@@ -40,7 +40,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/list`, {
+      const res = await fetch(`${API_BASE_URL}/files/list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -73,7 +73,7 @@ export const FileProvider = ({ children }) => {
       const formData = new FormData();
       formData.append("file", fileObj);
 
-      const res = await fetch(`${API_BASE_URL}/upload`, {
+      const res = await fetch(`${API_BASE_URL}/files/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -105,7 +105,7 @@ export const FileProvider = ({ children }) => {
 
       if (fileObj) formData.append("file", fileObj);
 
-      const res = await fetch(`${API_BASE_URL}/update/${file.id}`, {
+      const res = await fetch(`${API_BASE_URL}/files/update/${file.id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -135,7 +135,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/delete/${file.id}`, {
+      const res = await fetch(`${API_BASE_URL}/files/delete/${file.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -159,7 +159,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/share/${file.id}/share`, {
+      const res = await fetch(`${API_BASE_URL}/files/share/${file.id}/share`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -170,7 +170,7 @@ export const FileProvider = ({ children }) => {
       // URL-safe filename
       const safeFileName = encodeURIComponent(file.fileName || file.name);
 
-      const url = `${API_BASE_URL}/shared/${data.shareLink}?fileName=${safeFileName}`;
+      const url = `${API_BASE_URL}/files/shareds/${data.shareLink}?fileName=${safeFileName}`;
 
       // Update file in state
       const updated = { ...file, shared: true, url };
