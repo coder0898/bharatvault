@@ -4,7 +4,7 @@ import { useToast } from "./ToastContext";
 import { getIdToken } from "firebase/auth";
 
 const FileContext = createContext();
-const API_BASE_URL = "http://localhost:5000/files";
+const API_BASE_URL = "https://bharatvault-backend.onrender.com";
 
 export const FileProvider = ({ children }) => {
   const { currentUser } = useAuth();
