@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* General container */
+
+
+body {
+  margin: 0;
+ font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6b73ff, #000dff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Tabs */
+.tab-buttons {
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  justify-content: space-around;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  align-items: center;
+  background: #eee;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border-radius: 8px 8px 0 0;
+}
+
+.tab.active {
+  background: #6b73ff;
+  color: #fff;
+}
+
+/* Tab panels */
+.tab-panels {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.tab-panel.show {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  position: relative;
+}
+
+/* Form styles */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+input {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: #6b73ff;
+  box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
+}
+
+button {
+  padding: 0.75rem;
+  background: #6b73ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #000dff;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .tab-buttons {
+    flex-direction: column;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-buttons button {
+    width: 100%;
+  }
+}
+
+/* Sidebar toggle animation */
+.sidebar {
+  transition: transform 0.3s ease;
+  width: 250px;
+  min-width: 250px;
+}
+
+.sidebar-hide {
+  transform: translateX(-100%);
+}
+
+.sidebar-show {
+  transform: translateX(0);
+}
+
+/* Full height below navbar */
+.sidebar,
+.content {
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .sidebar {
+    transform: translateX(0) !important; /* always visible */
+    position: relative;
+  }
+  .content {
+    flex: 1;
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 767px) {
+  .sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    z-index: 1040;
+  }
+  .content {
+    width: 100%;
+  }
+}
+
+.upload-box {
+  transition: all 0.3s ease;
+  border-style: dashed !important;
+}
+
+.upload-box:hover {
+  background-color: #f0f8ff !important;
+  border-color: #0d6efd !important;
+  transform: scale(1.02);
+}
+
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table thead th {
+  background-color: #0d6efd !important;
+  color: #fff !important;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa !important;
+}
+
+form .form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
