@@ -144,7 +144,3 @@ Contributions are welcome! Feel free to:
 MIT License © 2025
 
 ---
-
-I can also **make a super clean markdown version with badges, screenshots, and tables** for tech stack if you want—it would look more professional for GitHub.
-
-Do you want me to do that next?
