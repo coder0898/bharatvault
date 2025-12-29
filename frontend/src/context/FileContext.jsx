@@ -4,7 +4,7 @@ import { useToast } from "./ToastContext";
 import { getIdToken } from "firebase/auth";
 
 const FileContext = createContext();
-const API_BASE_URL = "https://bharatvault-backend.onrender.com";
+// const VITE_API_URL = "https://bharatvault-backend.onrender.com";
 
 export const FileProvider = ({ children }) => {
   const { currentUser } = useAuth();
@@ -13,6 +13,24 @@ export const FileProvider = ({ children }) => {
 
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const logAction = async ({ userId, action, details = {} }) => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/log`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          action,
+          details,
+        }),
+      });
+    } catch (err) {
+      console.warn("Logger failed:", err.message);
+    }
+  };
 
   const fetchToken = async () => {
     if (!firebaseUser) return null;
@@ -40,7 +58,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/files/list`, {
+      const res = await fetch(`${VITE_API_URL}/files/list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -52,6 +70,13 @@ export const FileProvider = ({ children }) => {
 
       const normalized = data.files.map((f) => normalizeFile(f));
       setFileList(normalized);
+      await logAction({
+        userId: firebaseUser.uid,
+        action: "fetch_files",
+        details: {
+          count: data.files?.length || 0,
+        },
+      });
     } catch (err) {
       showToast(err.message, "danger");
     } finally {
@@ -73,7 +98,7 @@ export const FileProvider = ({ children }) => {
       const formData = new FormData();
       formData.append("file", fileObj);
 
-      const res = await fetch(`${API_BASE_URL}/files/upload`, {
+      const res = await fetch(`${VITE_API_URL}/files/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -87,7 +112,14 @@ export const FileProvider = ({ children }) => {
       const newFile = normalizeFile(data.file);
       setFileList((prev) => [newFile, ...prev]);
       showToast("File uploaded successfully", "success");
-
+      await logAction({
+        userId: firebaseUser.uid,
+        action: "upload_file",
+        details: {
+          fileName: data.file.originalName || fileObj.name,
+          fileId: data.file.id,
+        },
+      });
       return { success: true, file: newFile };
     } catch (err) {
       return { success: false, message: err.message };
@@ -105,7 +137,7 @@ export const FileProvider = ({ children }) => {
 
       if (fileObj) formData.append("file", fileObj);
 
-      const res = await fetch(`${API_BASE_URL}/files/update/${file.id}`, {
+      const res = await fetch(`${VITE_API_URL}/files/update/${file.id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -122,6 +154,14 @@ export const FileProvider = ({ children }) => {
       );
 
       showToast("File updated successfully", "success");
+      await logAction({
+        userId: firebaseUser.uid,
+        action: "update_file",
+        details: {
+          fileId: data.file.id,
+          fileName: data.file.originalName || file.name,
+        },
+      });
       return { success: true, file: updatedFile };
     } catch (err) {
       return { success: false, message: err.message };
@@ -135,7 +175,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/files/delete/${file.id}`, {
+      const res = await fetch(`${VITE_API_URL}/files/delete/${file.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -146,6 +186,14 @@ export const FileProvider = ({ children }) => {
 
       setFileList((prev) => prev.filter((_, i) => i !== index));
       showToast("File deleted successfully", "success");
+      await logAction({
+        userId: firebaseUser.uid,
+        action: "delete_file",
+        details: {
+          fileId: file.id,
+          fileName: file.name,
+        },
+      });
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
@@ -159,7 +207,7 @@ export const FileProvider = ({ children }) => {
 
     try {
       const token = await fetchToken();
-      const res = await fetch(`${API_BASE_URL}/files/share/${file.id}/share`, {
+      const res = await fetch(`${VITE_API_URL}/files/share/${file.id}/share`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -170,13 +218,23 @@ export const FileProvider = ({ children }) => {
       // URL-safe filename
       const safeFileName = encodeURIComponent(file.fileName || file.name);
 
-      const url = `${API_BASE_URL}/files/shareds/${data.shareLink}?fileName=${safeFileName}`;
+      const url = `${VITE_API_URL}/files/shareds/${data.shareLink}?fileName=${safeFileName}`;
 
       // Update file in state
       const updated = { ...file, shared: true, url };
       setFileList((prev) => prev.map((f, i) => (i === index ? updated : f)));
 
       showToast("Share link generated", "success");
+      await logAction({
+        userId: firebaseUser.uid,
+        action: "generate_share_link",
+        details: {
+          fileId: file.id,
+          fileName: file.name,
+          shareUrl: url,
+        },
+      });
+
       return url;
     } catch (err) {
       showToast(err.message, "danger");

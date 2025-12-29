@@ -21,6 +21,25 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const logAction = async ({ userId, action, details = {} }) => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/log`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          action,
+          details,
+        }),
+      });
+    } catch (err) {
+      // Never block auth flow due to logging failure
+      console.warn("Logger failed:", err.message);
+    }
+  };
+
   // Initialize user on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -30,6 +49,11 @@ export const AuthProvider = ({ children }) => {
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) aadhaar = docSnap.data().aadhaar || "";
+          await logAction({
+            userId: user.uid,
+            action: "auth_state_changed",
+            details: { email: user.email },
+          });
         } catch (err) {
           console.warn("Firestore read failed:", err.message);
         }
@@ -76,6 +100,14 @@ export const AuthProvider = ({ children }) => {
         displayName: res.user.displayName,
         aadhaar: "",
       });
+      await logAction({
+        userId: res.user.uid,
+        action: "signup",
+        details: {
+          email: res.user.email,
+          displayName: username,
+        },
+      });
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
@@ -103,6 +135,13 @@ export const AuthProvider = ({ children }) => {
         displayName: res.user.displayName,
         aadhaar,
       });
+      await logAction({
+        userId: res.user.uid,
+        action: "login",
+        details: {
+          email: res.user.email,
+        },
+      });
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
@@ -111,9 +150,16 @@ export const AuthProvider = ({ children }) => {
 
   // Logout
   const logout = useCallback(async () => {
+    if (currentUser?.uid) {
+      await logAction({
+        userId: currentUser.uid,
+        action: "logout",
+      });
+    }
+
     await signOut(auth);
     setCurrentUser(null);
-  }, []);
+  }, [currentUser]);
 
   // Update user
   const updateUser = useCallback(async (updatedUser, onError) => {
@@ -124,6 +170,13 @@ export const AuthProvider = ({ children }) => {
         { aadhaar: updatedUser.aadhaar },
         { merge: true }
       );
+      await logAction({
+        userId: updatedUser.uid,
+        action: "update_profile",
+        details: {
+          aadhaarUpdated: true,
+        },
+      });
     } catch (err) {
       console.warn("Firestore update failed:", err.message);
       if (onError) onError(err.message);

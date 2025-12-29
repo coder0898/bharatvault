@@ -10,6 +10,7 @@ import deleteRoute from "./routes/delete.js";
 import shareRoute from "./routes/share.js";
 import shareAccessRoute from "./routes/shareAccess.js";
 import listRoute from "./routes/list.js";
+import loggerRoutes from "./routes/logger.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/files/delete", deleteRoute);
 app.use("/files/share", shareRoute);
 app.use("/files/shared", shareAccessRoute); // public download
 app.use("/files/list", listRoute);
+app.use("/api", loggerRoutes);
 
 // Root route
 app.get("/", (req, res) => {
