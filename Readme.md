@@ -6,10 +6,7 @@
 
 ## 🔗 Live Demo
 
-Frontend: [https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)
-Backend API: [https://your-backend-url.onrender.com](https://your-backend-url.onrender.com)
-
----
+## Frontend: [\[https://bharatvault.vercel.app\]](https://bharatvault.vercel.app/)
 
 ## 📦 Features
 
