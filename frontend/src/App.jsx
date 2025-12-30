@@ -5,19 +5,6 @@ import PrivateRoute from "./routes/PrivateRoute.jsx";
 import Home from "./page/home/Home.jsx";
 
 function App() {
-  function checkEnv() {
-    console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
-    console.log(
-      "VITE_FIREBASE_API_KEY:",
-      import.meta.env.VITE_FIREBASE_API_KEY
-    );
-    console.log(
-      "VITE_FIREBASE_PROJECT_ID:",
-      import.meta.env.VITE_FIREBASE_PROJECT_ID
-    );
-  }
-
-  checkEnv();
   return (
     <>
       <Routes>
