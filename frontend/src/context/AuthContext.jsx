@@ -17,30 +17,31 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize user on mount
+
   const logAction = async ({ userId, action, details = {} }) => {
+    if (!API_URL) {
+      console.error("VITE_API_URL is not defined, skipping logAction");
+      return;
+    }
+
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/log`, {
+      await fetch(`${API_URL}/api/log`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          action,
-          details,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, action, details }),
       });
     } catch (err) {
-      // Never block auth flow due to logging failure
       console.warn("Logger failed:", err.message);
     }
   };
 
-  // Initialize user on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {

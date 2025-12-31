@@ -4,7 +4,8 @@ import { useToast } from "./ToastContext";
 import { getIdToken } from "firebase/auth";
 
 const FileContext = createContext();
-// const VITE_API_URL = "https://bharatvault-backend.onrender.com";
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+if (!VITE_API_URL) console.warn("VITE_API_URL is not defined in .env");
 
 export const FileProvider = ({ children }) => {
   const { currentUser } = useAuth();
@@ -16,7 +17,7 @@ export const FileProvider = ({ children }) => {
 
   const logAction = async ({ userId, action, details = {} }) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/log`, {
+      await fetch(`${VITE_API_URL}/api/log`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
