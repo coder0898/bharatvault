@@ -113,9 +113,6 @@ const Filelist = () => {
     setShareFile({ ...fileList[index], url });
   };
 
-  // const filteredFiles = fileList.filter((file) =>
-  //   file.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
-  // );
   const filteredFiles = fileList.filter((file) => {
     const safeName = file?.name || file?.originalName || "";
     return safeName.toLowerCase().includes(searchTerm.toLowerCase().trim());
