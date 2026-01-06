@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Container, Navbar } from "react-bootstrap";
-import { FileLock, List, ListColumns, ListNested } from "react-bootstrap-icons";
+import { FileLock, List } from "react-bootstrap-icons";
 
 const Header = ({ onLogoClick, toggleSidebar }) => {
   return (
@@ -15,21 +15,26 @@ const Header = ({ onLogoClick, toggleSidebar }) => {
         <Container
           fluid
           className="d-flex justify-content-between align-items-center"
+          style={{ maxWidth: "1140px" }}
         >
           <Navbar.Brand
             style={{ cursor: "pointer" }}
-            className="fs-2 text-primary fw-bold"
+            className="fs-2 text-primary fw-bold d-flex align-items-center"
             onClick={onLogoClick}
           >
-            <FileLock className="me-2" /> BharatVault
+            <FileLock size={32} className="me-2" />
+            BharatVault
           </Navbar.Brand>
+
           {/* Hamburger for mobile */}
           <Button
             variant="outline-primary"
             className="d-md-none me-2"
             onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
+            style={{ borderRadius: "8px", padding: "6px 12px" }}
           >
-            <List size={30} />
+            <List size={28} />
           </Button>
         </Container>
       </Navbar>

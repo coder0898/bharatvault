@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Button, FloatingLabel, Form, Spinner } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 
 const LoginForm = ({
@@ -11,11 +11,10 @@ const LoginForm = ({
 }) => {
   return (
     <div className={`tab-panel ${activeTab === "1" ? "show" : ""}`}>
-      <Form onSubmit={handleLoginSubmit}>
-        <Form.Group className="mb-3" controlId="loginEmail">
+      <Form onSubmit={handleLoginSubmit} className="login-form">
+        <FloatingLabel controlId="loginEmail" label="Email" className="mb-3">
           <Form.Control
             type="email"
-            placeholder="Email"
             name="loginEmail"
             value={loginDetails.loginEmail}
             onChange={(e) =>
@@ -26,13 +25,17 @@ const LoginForm = ({
             }
             autoComplete="email"
             required
+            placeholder="Email"
           />
-        </Form.Group>
+        </FloatingLabel>
 
-        <Form.Group className="mb-3" controlId="loginPassword">
+        <FloatingLabel
+          controlId="loginPassword"
+          label="Password"
+          className="mb-4"
+        >
           <Form.Control
             type="password"
-            placeholder="Password"
             name="loginPassword"
             value={loginDetails.loginPassword}
             onChange={(e) =>
@@ -43,13 +46,14 @@ const LoginForm = ({
             }
             required
             autoComplete="current-password"
+            placeholder="Password"
           />
-        </Form.Group>
+        </FloatingLabel>
 
         <Button
           type="submit"
-          className="w-100"
           variant="primary"
+          className="w-100 py-2"
           disabled={isSubmitting}
         >
           {isSubmitting && (
