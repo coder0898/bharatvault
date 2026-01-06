@@ -1,5 +1,12 @@
 import React from "react";
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FloatingLabel,
+  Form,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import { ArrowRepeat, PersonPlus } from "react-bootstrap-icons";
 
 const SignupForm = ({
@@ -13,9 +20,105 @@ const SignupForm = ({
   isSubmitting,
 }) => {
   return (
+    // <div className={`tab-panel ${activeTab === "2" ? "show" : ""}`}>
+    //   <Form onSubmit={handleSignupSubmit} onReset={handleResetForm}>
+    //     <Form.Group className="mb-3" controlId="username">
+    //       <Form.Control
+    //         type="text"
+    //         placeholder="Username"
+    //         name="username"
+    //         value={signupDetails.username}
+    //         onChange={(e) =>
+    //           setSignupDetails((prev) => ({
+    //             ...prev,
+    //             [e.target.name]: e.target.value,
+    //           }))
+    //         }
+    //         required
+    //         autoComplete="username"
+    //       />
+    //     </Form.Group>
+
+    //     <Form.Group className="mb-3" controlId="signupEmail">
+    //       <Form.Control
+    //         type="email"
+    //         placeholder="Email"
+    //         name="signupEmail"
+    //         value={signupDetails.signupEmail}
+    //         onChange={(e) =>
+    //           setSignupDetails((prev) => ({
+    //             ...prev,
+    //             [e.target.name]: e.target.value,
+    //           }))
+    //         }
+    //         required
+    //         autoComplete="email"
+    //       />
+    //     </Form.Group>
+
+    //     <Form.Group className="mb-3" controlId="signupPassword">
+    //       <Form.Control
+    //         type="password"
+    //         placeholder="Password"
+    //         name="signupPassword"
+    //         value={signupDetails.signupPassword}
+    //         onChange={(e) =>
+    //           setSignupDetails((prev) => ({
+    //             ...prev,
+    //             [e.target.name]: e.target.value,
+    //           }))
+    //         }
+    //         autoComplete="new-password"
+    //         required
+    //       />
+    //     </Form.Group>
+
+    //     <Form.Group className="mb-3" controlId="confirmPassword">
+    //       <Form.Control
+    //         type="password"
+    //         placeholder="Confirm Password"
+    //         value={confirmPassword}
+    //         onChange={(e) => setConfirmPassword(e.target.value)}
+    //         required
+    //         autoComplete="new-password"
+    //       />
+    //     </Form.Group>
+
+    //     <Row className="g-2">
+    //       <Col>
+    //         <Button
+    //           type="reset"
+    //           variant="warning"
+    //           className="w-100"
+    //           disabled={isSubmitting}
+    //         >
+    //           <ArrowRepeat className="me-2" /> Reset
+    //         </Button>
+    //       </Col>
+    //       <Col>
+    //         <Button
+    //           type="submit"
+    //           variant="primary"
+    //           className="w-100"
+    //           disabled={isSubmitting}
+    //         >
+    //           {isSubmitting && (
+    //             <Spinner animation="border" size="sm" className="me-2" />
+    //           )}
+    //           <PersonPlus className="me-2" /> Signup
+    //         </Button>
+    //       </Col>
+    //     </Row>
+    //   </Form>
+    // </div>
+
     <div className={`tab-panel ${activeTab === "2" ? "show" : ""}`}>
-      <Form onSubmit={handleSignupSubmit} onReset={handleResetForm}>
-        <Form.Group className="mb-3" controlId="username">
+      <Form
+        onSubmit={handleSignupSubmit}
+        onReset={handleResetForm}
+        className="signup-form"
+      >
+        <FloatingLabel controlId="username" label="Username" className="mb-3">
           <Form.Control
             type="text"
             placeholder="Username"
@@ -30,9 +133,9 @@ const SignupForm = ({
             required
             autoComplete="username"
           />
-        </Form.Group>
+        </FloatingLabel>
 
-        <Form.Group className="mb-3" controlId="signupEmail">
+        <FloatingLabel controlId="signupEmail" label="Email" className="mb-3">
           <Form.Control
             type="email"
             placeholder="Email"
@@ -47,9 +150,13 @@ const SignupForm = ({
             required
             autoComplete="email"
           />
-        </Form.Group>
+        </FloatingLabel>
 
-        <Form.Group className="mb-3" controlId="signupPassword">
+        <FloatingLabel
+          controlId="signupPassword"
+          label="Password"
+          className="mb-3"
+        >
           <Form.Control
             type="password"
             placeholder="Password"
@@ -64,9 +171,13 @@ const SignupForm = ({
             autoComplete="new-password"
             required
           />
-        </Form.Group>
+        </FloatingLabel>
 
-        <Form.Group className="mb-3" controlId="confirmPassword">
+        <FloatingLabel
+          controlId="confirmPassword"
+          label="Confirm Password"
+          className="mb-4"
+        >
           <Form.Control
             type="password"
             placeholder="Confirm Password"
@@ -75,30 +186,32 @@ const SignupForm = ({
             required
             autoComplete="new-password"
           />
-        </Form.Group>
+        </FloatingLabel>
 
         <Row className="g-2">
-          <Col>
+          <Col xs={12} sm={6}>
             <Button
               type="reset"
               variant="warning"
-              className="w-100"
+              className="w-100 py-2"
               disabled={isSubmitting}
             >
-              <ArrowRepeat className="me-2" /> Reset
+              <ArrowRepeat className="me-2" />
+              Reset
             </Button>
           </Col>
-          <Col>
+          <Col xs={12} sm={6}>
             <Button
               type="submit"
               variant="primary"
-              className="w-100"
+              className="w-100 py-2"
               disabled={isSubmitting}
             >
               {isSubmitting && (
                 <Spinner animation="border" size="sm" className="me-2" />
               )}
-              <PersonPlus className="me-2" /> Signup
+              <PersonPlus className="me-2" />
+              Signup
             </Button>
           </Col>
         </Row>
