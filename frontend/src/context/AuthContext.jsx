@@ -116,36 +116,38 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login
+
+  let loginTimerStarted = false;
+
   const login = useCallback(async (email, password) => {
+    if (!loginTimerStarted) {
+      console.time("LOGIN_TOTAL");
+      console.time("FIREBASE_LOGIN");
+      loginTimerStarted = true;
+    }
+
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
 
-      let aadhaar = "";
-      try {
-        const docRef = doc(db, "users", res.user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) aadhaar = docSnap.data().aadhaar || "";
-      } catch (err) {
-        console.warn("Firestore read failed:", err.message);
-      }
+      // console.timeEnd("FIREBASE_LOGIN");
 
       setCurrentUser({
         firebaseUser: res.user,
         uid: res.user.uid,
         email: res.user.email,
         displayName: res.user.displayName,
-        aadhaar,
+        aadhaar: "",
       });
-      await logAction({
-        userId: res.user.uid,
-        action: "login",
-        details: {
-          email: res.user.email,
-        },
-      });
+
+      logAction({ userId: res.user.uid, action: "login" });
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
+    } finally {
+      if (loginTimerStarted) {
+        // console.timeEnd("LOGIN_TOTAL");
+        loginTimerStarted = false;
+      }
     }
   }, []);
 
