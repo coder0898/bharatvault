@@ -219,7 +219,7 @@ export const FileProvider = ({ children }) => {
       // URL-safe filename
       const safeFileName = encodeURIComponent(file.fileName || file.name);
 
-      const url = `${VITE_API_URL}/files/shareds/${data.shareLink}?fileName=${safeFileName}`;
+      const url = `${VITE_API_URL}/files/shared/${data.shareLink}?fileName=${safeFileName}`;
 
       // Update file in state
       const updated = { ...file, shared: true, url };
